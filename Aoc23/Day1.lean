@@ -1,3 +1,5 @@
+import «Aoc23».Option
+
 def getFirstDigit (s : List Char) : Option Char :=
   match s with
   | [] => none
@@ -19,8 +21,6 @@ def getFirstAndLastDigit (s: String) : Option (List Char) :=
 
 def joinChars (p : Char × Char) : String :=
   [ p.fst , p.snd ].asString
-
-def Option.join {α : Type} (x : Option (Option α)) : Option α := Option.bind x id
 
 def digitListToInt (x : List Char) : Option Int := x.asString.toInt?
 
