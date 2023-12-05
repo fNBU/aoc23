@@ -1,1 +1,0 @@
-def buh := "world"
