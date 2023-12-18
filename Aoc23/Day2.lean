@@ -1,11 +1,11 @@
-import «Aoc23».Option
+import Std.Data.Option.Basic
 import «Aoc23».Prod
 
 structure ColorCounts where
   red : Nat
   green : Nat
   blue : Nat
-deriving Repr
+  deriving Repr
 
 def ColorCounts.max (a b : ColorCounts) : ColorCounts :=
   { red := Max.max a.red b.red , blue := Max.max a.blue b.blue , green := Max.max a.green b.green }
@@ -59,11 +59,9 @@ end
 def colorsToColorCounts (s : String) : Option ColorCounts :=
   parseList s.data { red := 0 , blue := 0 , green := 0 } |> Option.map Prod.fst
 
-def secondPart (x : String) : Option (List ColorCounts) := x
-  |> mySplit ';'
-  |> List.map (myDropWhile ' ')
-  |> List.map colorsToColorCounts
-  |> List.mapM id
+def secondPart (x : String) : Option (List ColorCounts) := List.mapM id ( colorsToColorCounts <$> myDropWhile ' ' <$> mySplit ';' x )
+
+def dealWithOneGame2 (x : String) := Option.join ( Prod.mapM id id <$> (λ x => ( getGameNumber x.fst , secondPart x.snd)) <$> ( twoElementListToProd ∘ mySplit ':' ) x )
 
 def dealWithOneGame (x : String) : Option (Nat × ColorCounts) := x
   |> mySplit ':'
