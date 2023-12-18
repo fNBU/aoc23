@@ -26,7 +26,7 @@ def fileStream (filename : System.FilePath) : IO (Option IO.FS.Stream) := do
     let handle ← IO.FS.Handle.mk filename IO.FS.Mode.read
     handle |> IO.FS.Stream.ofHandle |> some |> pure
 
-def usage := "Usage: aoc23 [ day1.1 | day1.2 | day2.1 | day2.2 ] FILE
+def usage := "Usage: aoc23 [ day1.1 | day1.2 | day2.1 | day2.2 | day3.1 | day3.2 ] FILE
 Compute the solution of the Advent of Code 2023 problem on input FILE."
 
 def outputSolution (a : Option String) : IO UInt32 := do
@@ -54,6 +54,8 @@ def process (day : String) (path : String) : IO UInt32 := do
       | "day1.2" => outputSolution (day1_2 l)
       | "day2.1" => outputSolution (day2_1 l)
       | "day2.2" => outputSolution (day2_2 l)
+      | "day3.1" => outputSolution (day3_1 l)
+      | "day3.2" => outputSolution (day3_2 l)
       | _ =>
         let stderr ← IO.getStderr
         stderr.putStrLn s!"Incorrect first argument: {day}."

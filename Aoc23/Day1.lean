@@ -1,4 +1,4 @@
-import «Aoc23».Option
+import Std.Data.Option.Basic
 
 def getFirstDigit (s : List Char) : Option Char :=
   match s with
@@ -34,8 +34,6 @@ def day1_1 (input : List String) : Option String := input
   |> List.mapM id
   |> Option.map (List.foldl Int.add 0)
   |> Option.map (Int.repr)
-
--- 2
 
 def getFirstDigitForward (s : List Char) : Option Char :=
   match s with
