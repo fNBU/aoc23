@@ -101,7 +101,7 @@ def Component.isSymbol (x : Component) : Bool :=
 def oneList (x : List String) : List Char :=
   x |> List.map String.data |> List.intercalate "newline".data
 
-def allComponents (input : List String) : Option ComponentSet := input |> oneList |> consumeAny { row := 0 , column := 0 } empty ""
+def allComponents (input : List String) : Option ComponentSet := input |> oneList |> consumeAny ⟨0,0⟩ empty ""
 
 def day3_1 (input : List String) : Option String :=
   let filterCS ( cs : ComponentSet ) : ComponentSet :=

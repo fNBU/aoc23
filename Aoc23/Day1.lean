@@ -1,4 +1,6 @@
 import Std.Data.Option.Basic
+import Lean.Data.Parsec
+import «Aoc23».Option
 
 def getFirstDigit (s : List Char) : Option Char :=
   match s with
@@ -29,11 +31,10 @@ def processOneLine (f : α → Option (List Char)) (x : α) : Option Int := x
   |> Option.map digitListToInt
   |> Option.join
 
-def day1_1 (input : List String) : Option String := input
-  |> List.map (processOneLine getFirstAndLastDigit)
-  |> List.mapM id
-  |> Option.map (List.foldl Int.add 0)
-  |> Option.map (Int.repr)
+def day1_1 (input : List String) : Option String :=
+  processOneLine getFirstAndLastDigit <$> input
+  |> List.foldl (· + ·) ( 0 : Int )
+  |> Option.map Int.repr
 
 def getFirstDigitForward (s : List Char) : Option Char :=
   match s with
@@ -85,10 +86,9 @@ def getFirstDigitBackward (s : List Char) : Option Char :=
 
 def getFirstAndLastDigit2 (s: String) : Option (List Char) :=
   let d := s.data
-  [ getFirstDigitForward d , getFirstDigitBackward ( List.reverse d ) ].mapM id
+  [ d |> getFirstDigitForward , d |> List.reverse |> getFirstDigitBackward ].mapM id
 
-def day1_2 (input : List String) := input
-  |> List.map (processOneLine getFirstAndLastDigit2)
-  |> List.mapM id
-  |> Option.map (List.foldl Int.add 0)
-  |> Option.map (Int.repr)
+def day1_2 (input : List String) :=
+  processOneLine getFirstAndLastDigit2 <$> input
+  |> List.foldl (· + ·) ( 0 : Int )
+  |> Option.map Int.repr
