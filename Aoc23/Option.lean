@@ -1,4 +1,26 @@
-def Option.flatten (x : Option (Option α)) := Option.bind x id
+namespace Option
+
+  def toExcept (x : Option α) (err : δ) : Except δ α :=
+    match x with
+    | none => Except.error err
+    | some x => Except.ok x
+
+  -- #eval Option.toExcept (some 3) "error"  -- ok 3
+  -- #eval Option.toExcept ( none : Option Nat ) "this is an error" -- Except.error "this is an error"
+
+  /--
+  If `δ` is `Inhabited`, uses `default` as the error message.
+  -/
+  def toExceptD [Inhabited δ] (x : Option α) : Except δ α :=
+    match x with
+    | none => Except.error default
+    | some x => Except.ok x
+
+  -- #eval ( ( Option.toExceptD (some 3) ) : Except Nat Nat )-- ok 3
+  -- #eval ( ( Option.toExceptD ( none : Option Nat ) ) : Except Nat Nat ) -- Except.error 0
+
+end Option
+
 
 /-
 -- One may be tempted to write

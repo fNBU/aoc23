@@ -3,6 +3,7 @@ import Lean.Data.HashMap
 open Lean HashMap
 
 namespace HashMap
+
   instance [BEq α] [Hashable α] [Repr α] [Repr β] : Repr (HashMap α β) where
     reprPrec m _ := repr m.toList
 
@@ -17,7 +18,6 @@ namespace HashMap
     | some v => m.insert i (f v)
 
   def mapAtList [BEq α] [Hashable α] (m : HashMap α β) (l : List α) (f : β → β) : HashMap α β :=
-    l.foldl (λ m i => match m.find? i with
-                      | none => m
-                      | some v => m.insert i (f v)) m
+    l.foldl (mapAt (f := f)) m
+
 end HashMap

@@ -1,94 +1,96 @@
-import Std.Data.Option.Basic
 import Lean.Data.Parsec
-import «Aoc23».Option
+import «Aoc23».Util
+import «Aoc23».Except
 
-def getFirstDigit (s : List Char) : Option Char :=
+
+def getFirstDigit (s : List Char) : Ex Char :=
   match s with
-  | [] => none
-  | '0' :: _ => some '0'
-  | '1' :: _ => some '1'
-  | '2' :: _ => some '2'
-  | '3' :: _ => some '3'
-  | '4' :: _ => some '4'
-  | '5' :: _ => some '5'
-  | '6' :: _ => some '6'
-  | '7' :: _ => some '7'
-  | '8' :: _ => some '8'
-  | '9' :: _ => some '9'
+  | [] => Except.error "getFirstDigit: Got empty list"
+  | '0' :: _ => Except.ok '0'
+  | '1' :: _ => Except.ok '1'
+  | '2' :: _ => Except.ok '2'
+  | '3' :: _ => Except.ok '3'
+  | '4' :: _ => Except.ok '4'
+  | '5' :: _ => Except.ok '5'
+  | '6' :: _ => Except.ok '6'
+  | '7' :: _ => Except.ok '7'
+  | '8' :: _ => Except.ok '8'
+  | '9' :: _ => Except.ok '9'
   | _ :: as => getFirstDigit as
 
-def getFirstAndLastDigit (s: String) : Option (List Char) :=
+def getFirstAndLastDigit (s: String) : Ex (List Char) :=
   let d := s.data
   [ getFirstDigit d , getFirstDigit ( List.reverse d ) ].mapM id
 
 def joinChars (p : Char × Char) : String :=
   [ p.fst , p.snd ].asString
 
-def digitListToInt (x : List Char) : Option Int := x.asString.toInt?
+def digitListToInt (x : List Char) : Ex Int :=
+  match x.asString.toInt? with
+  | some i => Except.ok i
+  | none => Except.error "digitListToInt: Couldn't convert to int"
 
-def processOneLine (f : α → Option (List Char)) (x : α) : Option Int := x
-  |> f
-  |> Option.map digitListToInt
-  |> Option.join
+def processOneLine (f : α → Ex (List Char)) (x : α) : Ex Int :=
+  x |> f |> Except.map digitListToInt |> Except.join
 
-def day1_1 (input : List String) : Option String :=
+def day1_1 (input : List String) : Ex String :=
   processOneLine getFirstAndLastDigit <$> input
-  |> List.foldl (· + ·) ( 0 : Int )
-  |> Option.map Int.repr
+  |> List.foldl (· + ·) ( pure 0 )
+  |> Except.map Int.repr
 
-def getFirstDigitForward (s : List Char) : Option Char :=
+def getFirstDigitForward (s : List Char) : Ex Char :=
   match s with
-  | [] => none
-  | '0' :: _ => some '0'
-  | '1' :: _ => some '1'
-  | '2' :: _ => some '2'
-  | '3' :: _ => some '3'
-  | '4' :: _ => some '4'
-  | '5' :: _ => some '5'
-  | '6' :: _ => some '6'
-  | '7' :: _ => some '7'
-  | '8' :: _ => some '8'
-  | '9' :: _ => some '9'
-  | 'o' :: 'n' :: 'e' :: _ => some '1'
-  | 't' :: 'w' :: 'o' :: _ => some '2'
-  | 't' :: 'h' :: 'r' :: 'e' :: 'e' :: _ => some '3'
-  | 'f' :: 'o' :: 'u' :: 'r' :: _ => some '4'
-  | 'f' :: 'i' :: 'v' :: 'e' :: _ => some '5'
-  | 's' :: 'i' :: 'x' :: _ => some '6'
-  | 's' :: 'e' :: 'v' :: 'e' :: 'n' :: _ => some '7'
-  | 'e' :: 'i' :: 'g' :: 'h' :: 't' :: _ => some '8'
-  | 'n' :: 'i' :: 'n' :: 'e' :: _ => some '9'
+  | [] => Except.error "getFirstDigitForward: Got empty list"
+  | '0' :: _ => Except.ok '0'
+  | '1' :: _ => Except.ok '1'
+  | '2' :: _ => Except.ok '2'
+  | '3' :: _ => Except.ok '3'
+  | '4' :: _ => Except.ok '4'
+  | '5' :: _ => Except.ok '5'
+  | '6' :: _ => Except.ok '6'
+  | '7' :: _ => Except.ok '7'
+  | '8' :: _ => Except.ok '8'
+  | '9' :: _ => Except.ok '9'
+  | 'o' :: 'n' :: 'e' :: _ => Except.ok '1'
+  | 't' :: 'w' :: 'o' :: _ => Except.ok '2'
+  | 't' :: 'h' :: 'r' :: 'e' :: 'e' :: _ => Except.ok '3'
+  | 'f' :: 'o' :: 'u' :: 'r' :: _ => Except.ok '4'
+  | 'f' :: 'i' :: 'v' :: 'e' :: _ => Except.ok '5'
+  | 's' :: 'i' :: 'x' :: _ => Except.ok '6'
+  | 's' :: 'e' :: 'v' :: 'e' :: 'n' :: _ => Except.ok '7'
+  | 'e' :: 'i' :: 'g' :: 'h' :: 't' :: _ => Except.ok '8'
+  | 'n' :: 'i' :: 'n' :: 'e' :: _ => Except.ok '9'
   | _ :: as => getFirstDigitForward as
 
-def getFirstDigitBackward (s : List Char) : Option Char :=
+def getFirstDigitBackward (s : List Char) : Ex Char :=
   match s with
-  | [] => none
-  | '0' :: _ => some '0'
-  | '1' :: _ => some '1'
-  | '2' :: _ => some '2'
-  | '3' :: _ => some '3'
-  | '4' :: _ => some '4'
-  | '5' :: _ => some '5'
-  | '6' :: _ => some '6'
-  | '7' :: _ => some '7'
-  | '8' :: _ => some '8'
-  | '9' :: _ => some '9'
-  | 'e' :: 'n' :: 'o' :: _ => some '1'
-  | 'o' :: 'w' :: 't' :: _ => some '2'
-  | 'e' :: 'e' :: 'r' :: 'h' :: 't' :: _ => some '3'
-  | 'r' :: 'u' :: 'o' :: 'f' :: _ => some '4'
-  | 'e' :: 'v' :: 'i' :: 'f' :: _ => some '5'
-  | 'x' :: 'i' :: 's' :: _ => some '6'
-  | 'n' :: 'e' :: 'v' :: 'e' :: 's' :: _ => some '7'
-  | 't' :: 'h' :: 'g' :: 'i' :: 'e' :: _ => some '8'
-  | 'e' :: 'n' :: 'i' :: 'n' :: _ => some '9'
+  | [] => Except.error "getFirstDigitBackward: Got empty list"
+  | '0' :: _ => Except.ok '0'
+  | '1' :: _ => Except.ok '1'
+  | '2' :: _ => Except.ok '2'
+  | '3' :: _ => Except.ok '3'
+  | '4' :: _ => Except.ok '4'
+  | '5' :: _ => Except.ok '5'
+  | '6' :: _ => Except.ok '6'
+  | '7' :: _ => Except.ok '7'
+  | '8' :: _ => Except.ok '8'
+  | '9' :: _ => Except.ok '9'
+  | 'e' :: 'n' :: 'o' :: _ => Except.ok '1'
+  | 'o' :: 'w' :: 't' :: _ => Except.ok '2'
+  | 'e' :: 'e' :: 'r' :: 'h' :: 't' :: _ => Except.ok '3'
+  | 'r' :: 'u' :: 'o' :: 'f' :: _ => Except.ok '4'
+  | 'e' :: 'v' :: 'i' :: 'f' :: _ => Except.ok '5'
+  | 'x' :: 'i' :: 's' :: _ => Except.ok '6'
+  | 'n' :: 'e' :: 'v' :: 'e' :: 's' :: _ => Except.ok '7'
+  | 't' :: 'h' :: 'g' :: 'i' :: 'e' :: _ => Except.ok '8'
+  | 'e' :: 'n' :: 'i' :: 'n' :: _ => Except.ok '9'
   | _ :: as => getFirstDigitBackward as
 
-def getFirstAndLastDigit2 (s: String) : Option (List Char) :=
+def getFirstAndLastDigit2 (s: String) : Ex (List Char) :=
   let d := s.data
   [ d |> getFirstDigitForward , d |> List.reverse |> getFirstDigitBackward ].mapM id
 
 def day1_2 (input : List String) :=
   processOneLine getFirstAndLastDigit2 <$> input
-  |> List.foldl (· + ·) ( 0 : Int )
-  |> Option.map Int.repr
+  |> List.foldl (· + ·) ( pure 0 )
+  |> Except.map Int.repr
