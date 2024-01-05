@@ -1,18 +1,26 @@
-import Lean.Data.Parsec
-import Lean.Data.HashMap
-
 import «Aoc23».List
+import «Aoc23».Util
 import «Aoc23».Parsec
-import «Aoc23».Option
 import «Aoc23».HashMap
+import «Aoc23».Option
 
-open Lean Lean.Parsec ParseResult Parsec HashMap
+
+open Lean Parsec' Except HashMap
 
 structure Card where
   n : Nat
   winning : List Nat
   had : List Nat
-  deriving Repr
+  deriving Repr, BEq
+
+def parseOneCard : Parsec Card := do
+  let _ ← skipString "Card" *> ws
+  let n ← nat
+  let _ ← ws *> skipString ":" *> ws
+  let l ← sebByL nat ws
+  let _ ← ws *> skipString "|" *> ws
+  let m ← sebByL nat spaces
+  return ({ n := n, winning := l, had := m } : Card)
 
 def Card.worth (c : Card) : Nat :=
     List.intersection c.winning c.had
@@ -28,27 +36,15 @@ def Card.worth2 (c : Card) : Nat :=
 
 def Cards : Type := List Card
 
-def Cards.worth (c : Cards) : Nat := c.map Card.worth |>.fold (.+.) ( 0 : Nat )
-
-def parseOneCard : Parsec Card := do
-  let _ ← skipString "Card"
-  let _ ← spaces
-  let n ← natDigits
-  let _ ← skipString ": "
-  let l ← manyNats
-  let _ ← skipString " | "
-  let m ← manyNats
-  pure ({ n := n, winning := l, had := m } : Card)
-
-def parseManyCards : Parsec $ List Card := do
-  let a ← many $ optionalPrefixDiscard (manySingleChar '\n') parseOneCard
+def parseCards : Parsec $ List Card := do
+  let a ← sepBy parseOneCard (pchar '\n')
   return a.toList
 
-def oneString (x : List String) : String :=
-  x |> List.map String.data |> List.intercalate "\n".data |> String.mk
+def Cards.worth (c : Cards) : Nat := c.map Card.worth |>.fold (.+.) ( 0 : Nat )
 
-def day4_1 (input : List String)  :=
-    Except.toOption $ Nat.repr <$> Cards.worth <$> Parsec.run parseManyCards (oneString input)
+
+def day4_1 (input : List String) : Ex String :=
+    Nat.repr <$> Cards.worth <$> Parsec.run parseCards (oneString input)
 
 structure CardInstances where
   instances : Nat
@@ -65,22 +61,22 @@ def cardsInstances (c : Cards) : CardsInstances :=
 def incrementBy (inc : Nat) (c : CardInstances) : CardInstances :=
   { instances := c.instances + inc, card := c.card }
 
-def getWorth2 (c : CardsInstances) (i : Nat) : Option Nat :=
+def getWorth2 (c : CardsInstances) (i : Nat) : Ex Nat :=
   match c.find? i with
-  | none => none
-  | some card => some $ Card.worth2 $ card.card
+  | none => error s!"getWorth2: Didn't find a card with the given index {i}"
+  | some card => ok $ Card.worth2 $ card.card
 
-def day4_2 (input : List String) : Option String :=
-  let cardsmap := cardsInstances <$> Parsec.run parseManyCards (oneString input)
+def day4_2 (input : List String) : Ex String :=
+  let cardsmap := cardsInstances <$> Parsec.run parseCards (oneString input)
   let indices := List.sortR (.<.) <$> HashMap.indices <$> cardsmap
-  let rec helper (c : CardsInstances) (remainingIndices : List Nat) (accum : Nat) : Option Nat := do
+  let rec helper (c : CardsInstances) (remainingIndices : List Nat) (accum : Nat) : Ex Nat := do
     match remainingIndices with
-    | [] => some accum
+    | [] => ok accum
     | n::t =>
-      let card ← c.find? n
-      let instances ← card.instances
+      let card ← (c.find? n).toExcept s!"day4_2.helper: Didn't find a card with the given index {n}"
+      let instances := card.instances
       let value ← getWorth2 c n
       let l := List.init value (λ x => x + n + 1)
-      let c' ← mapAtList c l (incrementBy instances)
+      let c' := mapAtList c l (incrementBy instances)
       helper c' t (accum + instances)
-  do Nat.repr <$> (helper (←cardsmap |>.toOption) (←indices |>.toOption) 0)
+  do Nat.repr <$> (helper (←cardsmap) (←indices) 0)

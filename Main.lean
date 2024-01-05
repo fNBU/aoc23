@@ -11,7 +11,7 @@ def getLines (fuel : Nat) (accum : List String) (stream : IO.FS.Stream) : IO (Op
   | n + 1 =>
     let buf ← stream.getLine
     if buf == "" then
-      accum |> some |> pure
+      accum |>.reverse |> some |> pure
     else
       getLines n ( (String.dropRightWhile buf (· == '\n') ) :: accum) stream
 
@@ -30,16 +30,17 @@ def usage := "Usage:
 aoc23 [   day1.1 | day1.2
         | day2.1 | day2.2
         | day3.1 | day3.2
-        | day4.1 | day4.2 ] FILE
+        | day4.1 | day4.2
+        | day5.1 | day5.2 ] FILE
 Compute the solution of the Advent of Code 2023 problem on input FILE."
 
-def outputSolution (a : Option String) : IO UInt32 := do
+def outputSolution (a : Ex String) : IO UInt32 := do
   let stout ← IO.getStdout
   match a with
-  | none =>
-    stout.putStrLn "Failed to compute an answer."
+  | Except.error s =>
+    stout.putStrLn s!"Failed to compute an answer. Message: {s}.}"
     pure 0
-  | some s =>
+  | Except.ok s =>
     stout.putStrLn s!"Computed an answer: {s}."
     pure 0
 
@@ -62,6 +63,8 @@ def process (day : String) (path : String) : IO UInt32 := do
       | "day3.2" => outputSolution (day3_2 l)
       | "day4.1" => outputSolution (day4_1 l)
       | "day4.2" => outputSolution (day4_2 l)
+      | "day5.1" => outputSolution (day5_1 l)
+      | "day5.2" => outputSolution (day5_2 l)
       | _ =>
         let stderr ← IO.getStderr
         stderr.putStrLn s!"Incorrect first argument: {day}."

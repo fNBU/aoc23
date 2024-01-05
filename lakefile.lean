@@ -7,6 +7,8 @@ package «aoc23» where
 lean_lib «Aoc23» where
   -- add library configuration options here
 
+-- lean_lib Inputs where
+
 @[default_target]
 lean_exe «aoc23» where
   root := `Main
@@ -17,3 +19,4 @@ lean_exe «aoc23» where
 
 require std from git "https://github.com/leanprover/std4" @ "v4.3.0"
 require mathlib from git "https://github.com/leanprover-community/mathlib4" @ "v4.3.0"
+require assertCmd from git "https://github.com/pnwamk/lean4-assert-command" @ "main"
