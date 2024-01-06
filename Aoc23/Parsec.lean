@@ -36,7 +36,7 @@ namespace Parsec'
     let a ← sepBy p sep
     return a.toList
 
-  def manyNats : Parsec' $ List Nat := sebByL nat spaces
+  def manyNats : Parsec' $ List Nat := sebByL nat ws
 
   def manyCharsList (l : List Char) : Parsec' $ List Char := do
     let a ← many $ satisfy l.contains
