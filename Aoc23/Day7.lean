@@ -3,8 +3,6 @@ import «Aoc23».Util
 import «Aoc23».Except
 import «Aoc23».List
 
-import Inputs
-
 open Parsec' Except
 
 inductive Card where
