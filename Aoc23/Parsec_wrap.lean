@@ -72,11 +72,6 @@ namespace Parsec'
   -- wrapping Lean.Parsec
   def satisfy (p : Char → Bool) : Parsec' Char := Lean.Parsec.satisfy p
 
-  -- -- new implementations here, although they aren't necessary
-  -- -- why reimplement `Char.isWhitespace`?
-  -- def whitespace : Parsec' Char := satisfy Char.isWhitespace
-  -- def manyWhitespace : Parsec' String := manyChars whitespace
-  -- def ws : Parsec' Unit := ( manyWhitespace *> pure () ) <|> pure ()
 
   -- wrapping Lean.Parsec
   def ws : Parsec' Unit := Lean.Parsec.ws
