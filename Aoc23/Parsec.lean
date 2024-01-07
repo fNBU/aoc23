@@ -32,14 +32,20 @@ namespace Parsec'
   def sepBy {α β : Type} (p : Parsec' α) (sep : Parsec' β) : Parsec' $ Array α :=
     sepBy1 p sep <|> pure #[]
 
-  def sebByL  (p : Parsec' α) (sep : Parsec' β) : Parsec' $ List α := do
+  def sepByL  (p : Parsec' α) (sep : Parsec' β) : Parsec' $ List α := do
     let a ← sepBy p sep
     return a.toList
 
-  def manyNats : Parsec' $ List Nat := sebByL nat ws
+  def manyNats : Parsec' $ List Nat := sepByL nat ws
 
   def manyCharsList (l : List Char) : Parsec' $ List Char := do
     let a ← many $ satisfy l.contains
     return a.toList
+
+  -- -- new implementations here, although they aren't necessary
+  -- -- why reimplement `Char.isWhitespace`?
+  -- def whitespace : Parsec' Char := satisfy Char.isWhitespace
+  -- def manyWhitespace : Parsec' String := manyChars whitespace
+  -- def ws' : Parsec' Unit := ( manyWhitespace *> pure () ) <|> pure ()
 
 end Parsec'

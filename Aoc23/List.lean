@@ -65,6 +65,26 @@ namespace List
   -/
   def sortD [Hashable α] (l : List α) := l.sort (fun x y => hash x < hash y)
 
+  def ord [Ord α] (l m : List α) : Ordering :=
+    match l, m with
+    | [] , [] => Ordering.eq
+    | [] , _ => Ordering.lt
+    | _ , [] => Ordering.gt
+    | (a::as), (b::bs) =>
+      match compare a b with
+      | Ordering.eq => ord as bs
+      | o => o
+
+  instance [Ord α] : Ord (List α) where
+    compare a b := ord a b
+
+  def part [BEq α] (l : List α) : List $ α × Nat :=
+    let distinct := l.distinct
+    distinct.foldl (
+      λ acc x =>
+      ( x, ( l.filter ( λ y => y == x ) ).length ) :: acc
+    ) []
+
   -- Make the interface for List similar to HashMap, so we can easily change implementations.
   def empty : List α := []
   def fold (f : α → β → α) (init : α) (l : List β) : α := foldl f init l
