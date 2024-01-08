@@ -9,6 +9,8 @@ open Except
 
 open Parsec' Lean.Parsec.ParseResult HashMap
 
+namespace Day5
+
 structure Map where
   destination : Nat
   source : Nat

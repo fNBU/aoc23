@@ -32,7 +32,9 @@ aoc23 [   day1.1 | day1.2
         | day3.1 | day3.2
         | day4.1 | day4.2
         | day5.1 | day5.2
-        | day6.1 | day6.2 ] FILE
+        | day6.1 | day6.2
+        | day7.1 | day7.2
+        | day8.1 | day8.2 ] FILE
 Compute the solution of the Advent of Code 2023 problem on input FILE."
 
 def outputSolution (a : Ex String) : IO UInt32 := do
@@ -58,16 +60,20 @@ def process (day : String) (path : String) : IO UInt32 := do
       match day with
       | "day1.1" => outputSolution (day1_1 l)
       | "day1.2" => outputSolution (day1_2 l)
-      | "day2.1" => outputSolution (day2_1 l)
-      | "day2.2" => outputSolution (day2_2 l)
+      | "day2.1" => outputSolution (Day2.day2_1 l)
+      | "day2.2" => outputSolution (Day2.day2_2 l)
       | "day3.1" => outputSolution (day3_1 l)
       | "day3.2" => outputSolution (day3_2 l)
-      | "day4.1" => outputSolution (day4_1 l)
-      | "day4.2" => outputSolution (day4_2 l)
-      | "day5.1" => outputSolution (day5_1 l)
-      | "day5.2" => outputSolution (day5_2 l)
+      | "day4.1" => outputSolution (Day4.day4_1 l)
+      | "day4.2" => outputSolution (Day4.day4_2 l)
+      | "day5.1" => outputSolution (Day5.day5_1 l)
+      | "day5.2" => outputSolution (Day5.day5_2 l)
       | "day6.1" => outputSolution (day6_1 l)
       | "day6.2" => outputSolution (day6_2 l)
+      | "day7.1" => outputSolution (day7_1 l)
+      | "day7.2" => outputSolution (day7_2 l)
+      | "day8.1" => outputSolution (day8_1 l)
+      | "day8.2" => outputSolution (day8_2 l)
       | _ =>
         let stderr ← IO.getStderr
         stderr.putStrLn s!"Incorrect first argument: {day}."

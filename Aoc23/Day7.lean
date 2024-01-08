@@ -53,19 +53,19 @@ end Card
 open Card
 
 def parseCard : Parsec' Card := (
-  pchar 'A' *> Parsec'.pure A <|>
-  pchar 'K' *> Parsec'.pure K <|>
-  pchar 'Q' *> Parsec'.pure Q <|>
-  pchar 'J' *> Parsec'.pure J <|>
-  pchar 'T' *> Parsec'.pure T <|>
-  pchar '9' *> Parsec'.pure nine <|>
-  pchar '8' *> Parsec'.pure eight <|>
-  pchar '7' *> Parsec'.pure seven <|>
-  pchar '6' *> Parsec'.pure six <|>
-  pchar '5' *> Parsec'.pure five <|>
-  pchar '4' *> Parsec'.pure four <|>
-  pchar '3' *> Parsec'.pure three <|>
-  pchar '2' *> Parsec'.pure two <|>
+  pchar 'A' *> pure A <|>
+  pchar 'K' *> pure K <|>
+  pchar 'Q' *> pure Q <|>
+  pchar 'J' *> pure J <|>
+  pchar 'T' *> pure T <|>
+  pchar '9' *> pure nine <|>
+  pchar '8' *> pure eight <|>
+  pchar '7' *> pure seven <|>
+  pchar '6' *> pure six <|>
+  pchar '5' *> pure five <|>
+  pchar '4' *> pure four <|>
+  pchar '3' *> pure three <|>
+  pchar '2' *> pure two <|>
   fail "parseCard: expected A, K, Q, J, T, 9, 8, 7, 6, 5, 4, 3, or 2"
 )
 
@@ -78,7 +78,7 @@ def parseHand : Parsec' Hand := do
   let c3 ← parseCard
   let c4 ← parseCard
   let c5 ← parseCard
-  Parsec'.pure (c1, c2, c3, c4, c5)
+  pure (c1, c2, c3, c4, c5)
 
 def Hand.toList (h : Hand) : List Card :=
   match h with
@@ -279,7 +279,7 @@ def parseHand' : Parsec' Hand' := do
   let c3 ← parseCard'
   let c4 ← parseCard'
   let c5 ← parseCard'
-  Parsec'.pure (c1, c2, c3, c4, c5)
+  pure (c1, c2, c3, c4, c5)
 
 def Hand.toHand' (h : Hand) : Hand' :=
   match h with

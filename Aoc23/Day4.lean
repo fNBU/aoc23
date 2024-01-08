@@ -4,8 +4,9 @@ import «Aoc23».Parsec
 import «Aoc23».HashMap
 import «Aoc23».Option
 
-
 open Lean Parsec' Except HashMap
+
+namespace Day4
 
 structure Card where
   n : Nat
@@ -17,9 +18,9 @@ def parseOneCard : Parsec Card := do
   let _ ← skipString "Card" *> ws
   let n ← nat
   let _ ← ws *> skipString ":" *> ws
-  let l ← sebByL nat ws
+  let l ← sepByL nat ws
   let _ ← ws *> skipString "|" *> ws
-  let m ← sebByL nat spaces
+  let m ← sepByL nat spaces
   return ({ n := n, winning := l, had := m } : Card)
 
 def Card.worth (c : Card) : Nat :=

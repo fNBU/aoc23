@@ -3,6 +3,8 @@ import «Aoc23».Parsec
 
 open Lean Parsec' Parsec.ParseResult
 
+namespace Day2
+
 /--
   ` red | green | blue : Color`
 -/

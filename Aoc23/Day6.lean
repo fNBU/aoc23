@@ -4,8 +4,6 @@ import «Aoc23».Except
 import «Aoc23».Int
 import «Aoc23».Float
 
-import Inputs
-
 open Except
 
 open Parsec' Lean.Parsec.ParseResult
