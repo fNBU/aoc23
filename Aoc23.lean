@@ -16,3 +16,5 @@ import «Aoc23».Day3
 import «Aoc23».Day4
 import «Aoc23».Day5
 import «Aoc23».Day6
+import «Aoc23».Day7
+import «Aoc23».Day8

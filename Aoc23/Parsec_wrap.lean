@@ -24,7 +24,7 @@ namespace Parsec'
 
   -- wrapping Lean.Parsec
   instance : Inhabited (Parsec' α) := ⟨λ it => error it default⟩
-  def pure (a : α) : Parsec' α := Lean.Parsec.pure a
+  private def pure (a : α) : Parsec' α := Lean.Parsec.pure a
   def bind {α β : Type} (f : Parsec' α) (g : α → Parsec' β) : Parsec' β := Lean.Parsec.bind f g
   instance : Monad Parsec' := { pure := pure, bind := bind }
   def orElse (p : Parsec' α) (q : Unit → Parsec' α) : Parsec' α := Lean.Parsec.orElse p q
