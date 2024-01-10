@@ -1,4 +1,5 @@
 import «Aoc23».Parsec_wrap
+import «Aoc23».Nat
 
 open Lean Parsec' Parsec.ParseResult
 
@@ -18,6 +19,10 @@ namespace Parsec'
     | none => fail s!"expected a natural number"
 
   def nat : Parsec' Nat := toNat (manyChars digit)
+
+  def int : Parsec' Int :=
+    ( (λ x => x |> Int.ofNat |>.neg) <$> toNat (pchar '-' *> manyChars digit) )
+    <|> Int.ofNat <$> nat
 
   def manySingleChar (c : Char) : Parsec' String := manyChars (pchar c)
 
