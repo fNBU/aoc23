@@ -18,3 +18,14 @@ import «Aoc23».Day5
 import «Aoc23».Day6
 import «Aoc23».Day7
 import «Aoc23».Day8
+import «Aoc23».Day9
+
+-- import «Aoc23».Day1test
+-- import «Aoc23».Day2test
+-- import «Aoc23».Day3test
+-- import «Aoc23».Day4test
+-- import «Aoc23».Day5test
+-- import «Aoc23».Day6test
+-- import «Aoc23».Day7test
+-- import «Aoc23».Day8test
+-- import «Aoc23».Day9test

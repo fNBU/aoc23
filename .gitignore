@@ -6,3 +6,4 @@ Aoc23/Util_private.lean
 Aoc23/Iterator.lean
 Aoc23/Parsec_reimplement.lean
 Aoc23/Day*test.lean
+Aoc23/LinAlg.lean

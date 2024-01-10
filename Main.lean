@@ -34,7 +34,9 @@ aoc23 [   day1.1 | day1.2
         | day5.1 | day5.2
         | day6.1 | day6.2
         | day7.1 | day7.2
-        | day8.1 | day8.2 ] FILE
+        | day8.1 | day8.2
+        | day9.1 | day9.2 ] FILE
+
 Compute the solution of the Advent of Code 2023 problem on input FILE."
 
 def outputSolution (a : Ex String) : IO UInt32 := do
@@ -74,6 +76,8 @@ def process (day : String) (path : String) : IO UInt32 := do
       | "day7.2" => outputSolution (day7_2 l)
       | "day8.1" => outputSolution (day8_1 l)
       | "day8.2" => outputSolution (day8_2 l)
+      | "day9.1" => outputSolution (day9_1 l)
+      | "day9.2" => outputSolution (day9_2 l)
       | _ =>
         let stderr ← IO.getStderr
         stderr.putStrLn s!"Incorrect first argument: {day}."
